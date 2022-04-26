@@ -37,6 +37,7 @@ export class AppComponent implements OnInit {
       (response: Employee) => {
         console.log(response);
         this.getEmployees();
+        addForm.reset();
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -54,6 +55,7 @@ export class AppComponent implements OnInit {
         alert(error.message);
       }
     );
+
   }
 
   public onDeleteEmployee(employeeId: number): void {
@@ -66,6 +68,23 @@ export class AppComponent implements OnInit {
         alert(error.message);
       }
     );
+  }
+
+  public searchEmployees(key: string): void {
+    console.log(key);
+    const results: Employee[] = [];
+    for(const employee of this.employees) {
+      if(employee.name.toLowerCase().indexOf(key.toLowerCase()) !== -1
+      || employee.email.toLowerCase().indexOf(key.toLowerCase()) !== -1
+      || employee.phone.toLowerCase().indexOf(key.toLowerCase()) !== -1
+      || employee.jobTitle.toLowerCase().indexOf(key.toLowerCase()) !== -1){
+        results.push(employee);
+      }
+    }
+    this.employees = results;
+    if(results.length === 0 || !key){
+      this.getEmployees();
+    }
   }
 
   public onOpenModal(employee: any, mode: string): void {
@@ -87,6 +106,5 @@ export class AppComponent implements OnInit {
     }
     container?.appendChild(button);
     button.click();
-    console.log('estive aqui');
   }
 }
